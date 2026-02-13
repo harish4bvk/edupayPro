@@ -14,13 +14,13 @@ pipeline {
             }
         }
 
-      /*  stage('Build Docker Image') {
+      stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t edupaypro:latest ."
+                    sh "docker build -t edupaypro:0.1 ."
                 }
             }
-        } */
+        } 
     } 
 
     post {
