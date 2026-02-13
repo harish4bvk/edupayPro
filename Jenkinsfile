@@ -20,8 +20,8 @@ pipeline {
                     sh "docker build -t edupaypro:latest ."
                 }
             }
-        }
-    } */
+        } */
+    } 
 
     post {
         always {
