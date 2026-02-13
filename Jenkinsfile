@@ -2,31 +2,30 @@ pipeline {
     agent any
 
     environment {
-        // Replace with your GitHub repo URL
-        GIT_REPO = 'https://github.com/your-username/your-repo.git'
+        GIT_REPO = 'https://github.com/harish4bvk/edupayPro.git'
         BRANCH   = 'main'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Pull source code from GitHub
-                git branch: "${BRANCH}", url: "${GIT_REPO}" credentialsId: 'github'
-
+                // Correct usage: commas separate arguments
+                git branch: "${BRANCH}", url: "${GIT_REPO}", credentialsId: 'github'
             }
         }
 
-        stage('List Files') {
+        stage('Build Docker Image') {
             steps {
-                // Just to verify code is pulled
-                sh 'ls -l'
+                script {
+                    sh "docker build -t edupaypro:latest ."
+                }
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline completed.'
+            echo 'Pipeline finished.'
         }
     }
 }
