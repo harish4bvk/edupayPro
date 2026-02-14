@@ -30,7 +30,7 @@ pipeline {
             steps {
                 // Run container on Docker Server
                 sh '''
-                ssh ec2-user@43.205.126.252 "docker run -d --name myapp_container -p 8080:8080 myapp:latest"
+                ssh ec2-user@43.205.126.252 "docker run -d --name myapp_container -p 8080:80 myapp:latest"
                 '''
             }
         }
