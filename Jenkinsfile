@@ -1,7 +1,6 @@
 pipeline {
     agent any
-
-    environment {
+environment {
         GIT_REPO = 'https://github.com/harish4bvk/edupayPro.git'
         BRANCH   = 'main'
     }
@@ -15,30 +14,40 @@ pipeline {
                 echo git checkout 
                 '''    
             }
+        }        stage('Ask for Docker IP') {
+            steps {
+                script {
+                    def dockerIp = input(
+                        id: 'DockerIP',
+                        message: 'Enter the Docker Server IP:',
+                        parameters: [
+                            string(name: 'DOCKER_IP', description: 'Provide the Docker server IP address')
+                        ]
+                    )
+                    echo "Docker IP entered: ${dockerIp}"
+                }
+            }
         }
+
         stage('Build Docker Image') {
             steps {
-                // Build image on Docker Server via SSH
-                sh '''
-                scp -r . ec2-user@43.205.126.252:/home/ec2-user/app
-                ssh ec2-user@43.205.126.252 "cd /home/ec2-user/app && docker build -t myapp:latest ."
-                '''
+                script {
+                    sh """
+                    scp -r . ec2-user@${dockerIp}/home/ec2-user/app
+                    ssh ec2-user@${dockerIp} "cd /home/ec2-user/app && docker build -t myapp:latest ."
+                    """
+                }
             }
         }
 
         stage('Run Container') {
             steps {
-                // Run container on Docker Server
-                sh '''
-                ssh ec2-user@43.205.126.252 "docker run -d --name myapp_container -p 8080:80 myapp:latest"
-                '''
+                script {
+                    sh """
+                    ssh ec2-user@${dockerIp} "docker run -d --name myapp_container -p 8080:80 myapp:latest"
+                    """
+                }
             }
-        }
-    } 
-
-    post {
-        always {
-            echo 'Pipeline finished.'
         }
     }
 }
