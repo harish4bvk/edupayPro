@@ -11,6 +11,9 @@ pipeline {
             steps {
                 // Correct usage: commas separate arguments
                 git branch: "${BRANCH}", url: "${GIT_REPO}", credentialsId: 'github'
+                sh '''
+                echo git checkout 
+                '''    
             }
         }
         stage('Build Docker Image') {
